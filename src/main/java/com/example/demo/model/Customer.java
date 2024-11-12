@@ -1,38 +1,29 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import jakarta.persistence.OneToOne;
 
 @Entity
-@Table 
 public class Customer {
-    @Id
-    @SequenceGenerator(
-            name = "customer_sequence",
-            sequenceName = "customer_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            generator = "customer_sequence",
-            strategy = GenerationType.SEQUENCE
-    )
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Auto-generate ID
     private long id;
 
     private String name;
     private String surname;
 
-    public Customer() {
-    }
+    @OneToOne(mappedBy = "customer")  // Indicates the relationship with Account
+    @JsonManagedReference  // Prevents infinite recursion
+    private Account account;
 
-    public Customer(long id, String name, String surname) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
+    // Default constructor
+    public Customer() {
     }
 
     public Customer(String name, String surname) {
@@ -40,28 +31,50 @@ public class Customer {
         this.surname = surname;
     }
 
-    public void setSurname(String surname) {
+    public Customer(String name, String surname, Account account) {
+        this.name = name;
         this.surname = surname;
+        this.account = account;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    // Getters and setters
+    public long getId() {
+        return id;
     }
 
     public void setId(long id) {
         this.id = id;
     }
 
-    public long getId() {
-        return id;
-    }
-
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getSurname() {
         return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    // Calculated balance based on all account transactions
+    public double getBalance() {
+        return account != null ? account.getTransactions().stream()
+                .mapToDouble(Transaction::getAmount)
+                .sum() : 0.0;
     }
 
     @Override
@@ -70,6 +83,8 @@ public class Customer {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
+                ", balance=" + getBalance() +
+                ", account=" + account +
                 '}';
     }
 }

@@ -19,4 +19,9 @@ public class CustomerService {
     public List<Customer> getCustomers() {
             return customerRepository.findAll();
     }
+
+    public Customer getCustomer(Long customerId) {
+        return customerRepository.findById(customerId)
+                .orElseThrow(() -> new RuntimeException("Customer not found with id:" + customerId));
+    }
 }

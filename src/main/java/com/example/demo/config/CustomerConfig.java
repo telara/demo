@@ -1,13 +1,13 @@
 package com.example.demo.config;
 
+import java.util.List;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.example.demo.model.Customer;
 import com.example.demo.repository.CustomerRepository;
-
-import java.util.List;
 
 @Configuration
 public class CustomerConfig {
@@ -19,15 +19,19 @@ public class CustomerConfig {
         return args -> {
             Customer telara = new Customer(
                     "Telara",
-                    "JuneBug"
+                    "Doe"
             );
             Customer john = new Customer(
                     "John",
-                    "Doe"
+                    "Roe"
+            );
+            Customer jane = new Customer(
+                    "Jane",
+                    "Roe"
             );
 
             repository.saveAll(
-                    List.of(telara, john)
+                    List.of(telara, john, jane)
             );
         };
     }
