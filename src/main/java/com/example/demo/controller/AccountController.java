@@ -2,8 +2,8 @@ package com.example.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.Account;
@@ -32,7 +32,7 @@ public class AccountController {
      * @return The newly created account or an error message if customer is not found or account exists.
      */
     @PostMapping("/account")
-    public Account openAccount(@RequestBody Long customerId, @RequestBody double initialCredit) {
+    public Account openAccount(@RequestParam Long customerId, @RequestParam double initialCredit) {
         return accountService.createAccount(customerId, initialCredit);
     }
 }
